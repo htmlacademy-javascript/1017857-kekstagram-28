@@ -13,7 +13,6 @@ const INITIAL_STRING = 'q';
 const MIN_LENGTH = 4;
 const ADDITIONAL_SYMBOLS = 'we';
 
-
 // Функция для проверки длины строки.
 const checkStringLength = (string, length) => (string.length <= length ? 'строка проходит по длине' : 'строка не проходит');
 
@@ -54,7 +53,7 @@ const addingSymbols = (initialString, minlength, addSymbols) => {
   return addingString.concat(initialString);
 };
 
-checkStringLength(STRING, LENGTH);
-checkPalindrome(WORD);
-extractDigits(STRING_WITH_DIGITS);
-addingSymbols(INITIAL_STRING, MIN_LENGTH, ADDITIONAL_SYMBOLS);
+console.log(checkStringLength(STRING, LENGTH));
+console.log(checkPalindrome(WORD));
+console.log(extractDigits(STRING_WITH_DIGITS));
+console.log(addingSymbols(INITIAL_STRING, MIN_LENGTH, ADDITIONAL_SYMBOLS));
