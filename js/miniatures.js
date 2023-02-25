@@ -7,7 +7,7 @@ const picturesListFragment = document.createDocumentFragment();
  * Отрисовывает миниатюры случайных пользователей на главной странице
  * @param {Array} photosData - массив данных фотографий
  */
-const createRandomUserPhotos = (photosData) => {
+const renderRandomUserPhotos = (photosData) => {
   photosData.forEach ((photoData) => {
     const randomUserPictureElement = randomUserPictureTemplate.cloneNode(true);
     randomUserPictureElement.querySelector('.picture__img').setAttribute('src', photoData.url);
@@ -18,4 +18,4 @@ const createRandomUserPhotos = (photosData) => {
   picturesListElement.append(picturesListFragment);
 };
 
-export {createRandomUserPhotos};
+export {renderRandomUserPhotos};
