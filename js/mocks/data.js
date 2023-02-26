@@ -5,12 +5,12 @@ import {
   generateRandomElement
 } from './util.js';
 
-
+const COUNT_OF_PHOTOS = 25;
 const Comments = {
   MIN_ID: 1,
   MAX_ID: 150,
-  MIN_COUNT: 1,
-  MAX_COUNT: 6
+  MIN_COUNT: 5,
+  MAX_COUNT: 30
 };
 const Likes = {
   MIN: 15,
@@ -97,4 +97,6 @@ const generatePhotoData = () => {
  */
 const generateUserPhotoData = (count) => Array.from({length: count}, generatePhotoData);
 
-export {generateUserPhotoData};
+const userPhotoData = generateUserPhotoData(COUNT_OF_PHOTOS);
+
+export {userPhotoData};

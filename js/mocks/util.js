@@ -57,4 +57,12 @@ const createRandomIdFromRangeGenerator = (min, max) => {
  */
 const generateRandomElement = (array) => array[generateRandomInteger(0, array.length - 1)];
 
-export {createIdGenerator, generateRandomInteger, createRandomIdFromRangeGenerator, generateRandomElement};
+/**
+ * Проверяет на нажатие кнопки Enter
+ * @param evt
+ * @return {boolean}
+ */
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {createIdGenerator, generateRandomInteger, createRandomIdFromRangeGenerator, generateRandomElement, isEscapeKey};
+
