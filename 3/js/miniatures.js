@@ -11,6 +11,7 @@ const renderRandomUserPhotos = (photosData) => {
   photosData.forEach ((photoData) => {
     const randomUserPictureElement = randomUserPictureTemplate.cloneNode(true);
     randomUserPictureElement.querySelector('.picture__img').setAttribute('src', photoData.url);
+    randomUserPictureElement.querySelector('.picture__img').setAttribute('data-index', photoData.id);
     randomUserPictureElement.querySelector('.picture__comments').textContent = photoData.comments.length;
     randomUserPictureElement.querySelector('.picture__likes').textContent = photoData.likes;
     picturesListFragment.append(randomUserPictureElement);
