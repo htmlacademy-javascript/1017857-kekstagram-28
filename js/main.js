@@ -1,4 +1,5 @@
-import './functions.js';
-import {createPhotos} from './data.js';
+import {userPhotoData} from './mocks/data.js';
+import {renderRandomUserPhotos} from './miniatures.js';
+import './full-image.js';
 
-console.log(createPhotos());
+renderRandomUserPhotos(userPhotoData);
