@@ -1,5 +1,6 @@
-import {userPhotoData} from './mocks/data.js';
-import {renderRandomUserPhotos} from './miniatures.js';
-import './full-image.js';
+import {generatePhotosData} from './mocks/photos-data.js';
+import {renderMiniatures} from './miniatures.js';
 
-renderRandomUserPhotos(userPhotoData);
+const COUNT_OF_PHOTOS = 25;
+
+renderMiniatures(generatePhotosData(COUNT_OF_PHOTOS));
