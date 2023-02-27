@@ -7,6 +7,10 @@ const commentListElement = bigPictureElement.querySelector('.social__comments');
 const commentItemTemplate = commentListElement.querySelector('.social__comment');
 const commentListFragment = document.createDocumentFragment();
 
+/**
+ * Функция выводит список комментариев пользователей
+ * @param {Array} commentsData - Список комменатриев к фотографии
+ */
 const modifyCommentList = (commentsData) => {
   commentListElement.innerHTML = '';
   commentsData.forEach((commentData) => {
@@ -19,6 +23,10 @@ const modifyCommentList = (commentsData) => {
   commentListElement.append(commentListFragment);
 };
 
+/**
+ * Функция выводит большое изображение на основе полученных данных
+ * @param {Object} photoData - данные изображения
+ */
 const modifyBigPicture = (photoData) => {
   bigPictureElement.querySelector('.big-picture__img img').setAttribute('src', photoData.url);
   bigPictureElement.querySelector('.likes-count').textContent = photoData.likes;
@@ -28,7 +36,10 @@ const modifyBigPicture = (photoData) => {
   modifyCommentList(photoData.comments);
 };
 
-
+/**
+ * Функция открывает большое изображение и добавляет обработчик на закрытие окна по нажатию на кнопку Enter
+ * @param {Object} photoData - данные изображения
+ */
 const openBigPicture = (photoData) => {
   bigPictureElement.classList.remove('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
@@ -36,16 +47,26 @@ const openBigPicture = (photoData) => {
   bodyElement.classList.add('modal-open');
 };
 
+/**
+ * Функция закрывает большое изображение и удаляет обработчик на закрытие окна по нажатию на кнопку Enter
+ */
 const closeBigPicture = () => {
   bigPictureElement.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
   bodyElement.classList.remove('modal-open');
 };
 
+/**
+ * Обработчик события на закрытие изображения по клику
+ */
 closeBigPictureElement.addEventListener('click', () => {
   closeBigPicture();
 });
 
+/**
+ * Обработчик события на закрытие изображения по кнопке Enter
+ * @param {Object} evt - Объект события
+ */
 function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();

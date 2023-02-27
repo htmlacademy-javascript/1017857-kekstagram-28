@@ -5,7 +5,7 @@ const miniatureTemplate = document.querySelector('#picture').content.querySelect
 const miniatureListFragment = document.createDocumentFragment();
 
 /**
- * Отрисовывает миниатюры случайных пользователей на главной странице
+ * Функция отрисовывает миниатюры случайных пользователей на главной странице и добавляет обработчик события на открытие большого изображения по клику на миниатюре
  * @param {Array} photosData - массив данных фотографий
  */
 const renderMiniatures = (photosData) => {
