@@ -5,8 +5,12 @@ const commentListFragment = document.createDocumentFragment();
 const COMMENT_COUNT_INIT = 5;
 
 let commentsCount = COMMENT_COUNT_INIT;
-const addComments = (commentsData, count) => {
+
+const clearComment = () => {
   commentListElement.innerHTML = '';
+};
+const addComments = (commentsData, count) => {
+  clearComment();
   for (let i = 0; i < count; i ++) {
     if (commentsData.length === i) {
       social.querySelector('.comments-loader').classList.add('hidden');
