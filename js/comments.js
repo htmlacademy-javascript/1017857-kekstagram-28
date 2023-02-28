@@ -9,6 +9,15 @@ let commentsCount = COMMENT_COUNT_INIT;
 const clearComment = () => {
   commentListElement.innerHTML = '';
 };
+
+const appendComment = (commentData) => {
+  const commentItemElement = commentItemTemplate.cloneNode(true);
+  commentItemElement.querySelector('.social__picture').setAttribute('src', commentData.avatar);
+  commentItemElement.querySelector('.social__picture').setAttribute('alt', commentData.name);
+  commentItemElement.querySelector('.social__text').textContent = commentData.message;
+  commentListFragment.append(commentItemElement);
+};
+
 const addComments = (commentsData, count) => {
   clearComment();
   for (let i = 0; i < count; i ++) {
@@ -16,11 +25,7 @@ const addComments = (commentsData, count) => {
       social.querySelector('.comments-loader').classList.add('hidden');
       break;
     }
-    const commentItemElement = commentItemTemplate.cloneNode(true);
-    commentItemElement.querySelector('.social__picture').setAttribute('src', commentsData[i].avatar);
-    commentItemElement.querySelector('.social__picture').setAttribute('alt', commentsData[i].name);
-    commentItemElement.querySelector('.social__text').textContent = commentsData[i].message;
-    commentListFragment.append(commentItemElement);
+    appendComment(commentsData[i]);
   }
   commentListElement.append(commentListFragment);
 };
