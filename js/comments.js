@@ -1,33 +1,53 @@
+const SHOW_COMMENT_COUNT = 5;
 const social = document.querySelector('.social');
 const commentListElement = social.querySelector('.social__comments');
 const commentItemTemplate = commentListElement.querySelector('.social__comment');
-const commentListFragment = document.createDocumentFragment();
-const COMMENT_COUNT_INIT = 5;
+const commentsLoader = social.querySelector('.comments-loader');
+let commentList = [];
+let countComments = SHOW_COMMENT_COUNT;
 
-let commentsCount = COMMENT_COUNT_INIT;
 
-const clearComment = () => {
+const clearComments = () => {
   commentListElement.innerHTML = '';
 };
 
-const appendComment = (commentData) => {
+const appendCommentItem = (commentData) => {
   const commentItemElement = commentItemTemplate.cloneNode(true);
   commentItemElement.querySelector('.social__picture').setAttribute('src', commentData.avatar);
   commentItemElement.querySelector('.social__picture').setAttribute('alt', commentData.name);
   commentItemElement.querySelector('.social__text').textContent = commentData.message;
-  commentListFragment.append(commentItemElement);
+  return commentItemElement;
 };
 
-const addComments = (commentsData, count) => {
-  clearComment();
-  for (let i = 0; i < count; i ++) {
-    if (commentsData.length === i) {
-      social.querySelector('.comments-loader').classList.add('hidden');
-      break;
+const createCommentList = (commentsData) => {
+  commentsData.forEach((item) => {
+    commentList.push(appendCommentItem(item));
+  });
+};
+
+const showCommentCount = (count) => {
+  const reg = /^[0-9]{1,3}/;
+  let currentCommentCount = social.querySelector('.social__comment-count').innerHTML;
+  currentCommentCount = currentCommentCount.replace(reg, count);
+  social.querySelector('.social__comment-count').innerHTML = currentCommentCount;
+};
+
+
+const renderCommentList = (commentsData, count) => {
+  clearComments();
+  commentsData.forEach((item, index) => {
+    if (index >= count) {
+      item.classList.add('hidden');
+    } else {
+      item.classList.remove('hidden');
     }
-    appendComment(commentsData[i]);
+    commentListElement.append(item);
+  });
+  if (count >= commentsData.length) {
+    commentsLoader.classList.add('hidden');
   }
-  commentListElement.append(commentListFragment);
+  // eslint-disable-next-line no-unused-expressions
+  count < commentsData.length ? showCommentCount(count) : showCommentCount(commentsData.length);
 };
 
 /**
@@ -35,13 +55,18 @@ const addComments = (commentsData, count) => {
  * @param {Array} commentsData - Список комментариев к фотографии
  */
 const modifyCommentList = (commentsData) => {
+  commentList = [];
+  countComments = SHOW_COMMENT_COUNT;
+  clearComments();
   social.querySelector('.comments-count').textContent = commentsData.length;
-  addComments(commentsData, commentsCount);
-  social.querySelector('.comments-loader').addEventListener('click', () => {
-    commentsCount += COMMENT_COUNT_INIT;
-    addComments(commentsData, commentsCount);
-  });
+  commentsLoader.classList.remove('hidden');
+  createCommentList(commentsData);
+  renderCommentList(commentList, countComments);
 };
 
+commentsLoader.addEventListener('click', () =>{
+  countComments += SHOW_COMMENT_COUNT;
+  renderCommentList(commentList, countComments);
+});
 
 export {modifyCommentList};
