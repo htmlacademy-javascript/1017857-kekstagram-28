@@ -3,23 +3,8 @@ import {
   generateRandomInteger,
   createRandomIdFromRangeGenerator,
   generateRandomElement
-} from './util.js';
+} from '../util.js';
 
-const COUNT_OF_PHOTOS = 25;
-const Comments = {
-  MIN_ID: 1,
-  MAX_ID: 150,
-  MIN_COUNT: 5,
-  MAX_COUNT: 30
-};
-const Likes = {
-  MIN: 15,
-  MAX: 200
-};
-const Avatar = {
-  MIN: 1,
-  MAX: 5
-};
 const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -38,6 +23,20 @@ const NAMES = [
   'Люпита',
   'Вашингтон'
 ];
+const Comments = {
+  MIN_ID: 1,
+  MAX_ID: 150,
+  MIN_COUNT: 5,
+  MAX_COUNT: 30
+};
+const Likes = {
+  MIN: 15,
+  MAX: 200
+};
+const Avatar = {
+  MIN: 1,
+  MAX: 5
+};
 
 const generatePhotoId = createIdGenerator();
 const generateCommentId = createRandomIdFromRangeGenerator(Comments.MIN_ID, Comments.MAX_ID);
@@ -60,7 +59,7 @@ const generateComment = (commentId) => ({
  * @param {number} commentCount - количество комментариев
  * @return {Array} Список комментариев заданного размера
  */
-const createCommentList = (commentCount) => {
+const generateCommentList = (commentCount) => {
   const commentList = [];
   for (let i = 0; i <= commentCount; i++) {
     commentList.push(generateComment(generateCommentId()));
@@ -85,7 +84,7 @@ const generatePhotoData = () => {
     url: `photos/${photoId}.jpg`,
     description: `Описание фотографии ${photoId}.jpg`,
     likes: generateRandomInteger(Likes.MIN, Likes.MAX),
-    comments: createCommentList(generateRandomInteger(Comments.MIN_COUNT, Comments.MAX_COUNT))
+    comments: generateCommentList(generateRandomInteger(Comments.MIN_COUNT, Comments.MAX_COUNT))
   };
 };
 
@@ -95,8 +94,6 @@ const generatePhotoData = () => {
  * @param {number} count - количество фотографий
  * @return {Array} Массив данных для фотографий заданного размера
  */
-const generateUserPhotoData = (count) => Array.from({length: count}, generatePhotoData);
+const generatePhotosData = (count) => Array.from({length: count}, generatePhotoData);
 
-const userPhotoData = generateUserPhotoData(COUNT_OF_PHOTOS);
-
-export {userPhotoData};
+export {generatePhotosData};

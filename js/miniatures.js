@@ -1,22 +1,25 @@
-const picturesListElement = document.querySelector('.pictures');
-const randomUserPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+import {openBigPicture} from './big-picture.js';
 
-const picturesListFragment = document.createDocumentFragment();
+const miniatureListElement = document.querySelector('.pictures');
+const miniatureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const miniatureListFragment = document.createDocumentFragment();
 
 /**
- * Отрисовывает миниатюры случайных пользователей на главной странице
+ * Функция отрисовывает миниатюры случайных пользователей на главной странице и добавляет обработчик события на открытие большого изображения по клику на миниатюре
  * @param {Array} photosData - массив данных фотографий
  */
-const renderRandomUserPhotos = (photosData) => {
+const renderMiniatures = (photosData) => {
   photosData.forEach ((photoData) => {
-    const randomUserPictureElement = randomUserPictureTemplate.cloneNode(true);
-    randomUserPictureElement.querySelector('.picture__img').setAttribute('src', photoData.url);
-    randomUserPictureElement.querySelector('.picture__img').setAttribute('data-index', photoData.id);
-    randomUserPictureElement.querySelector('.picture__comments').textContent = photoData.comments.length;
-    randomUserPictureElement.querySelector('.picture__likes').textContent = photoData.likes;
-    picturesListFragment.append(randomUserPictureElement);
+    const miniatureElement = miniatureTemplate.cloneNode(true);
+    miniatureElement.querySelector('.picture__img').setAttribute('src', photoData.url);
+    miniatureElement.querySelector('.picture__comments').textContent = photoData.comments.length;
+    miniatureElement.querySelector('.picture__likes').textContent = photoData.likes;
+    miniatureElement.addEventListener('click', () => {
+      openBigPicture(photoData);
+    });
+    miniatureListFragment.append(miniatureElement);
   });
-  picturesListElement.append(picturesListFragment);
+  miniatureListElement.append(miniatureListFragment);
 };
 
-export {renderRandomUserPhotos};
+export {renderMiniatures};
