@@ -3,7 +3,7 @@ import {
   generateRandomInteger,
   createRandomIdFromRangeGenerator,
   generateRandomElement
-} from '../util.js';
+} from './mock-functions.js';
 
 const MESSAGES = [
   'Всё отлично!',
