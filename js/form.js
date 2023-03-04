@@ -1,6 +1,13 @@
 import {isEscapeKey} from './util.js';
 
-const SCALE_STEP = 25;
+const MESSAGE_MAX_LENGTH = 140;
+const HASHTAG_MAX_COUNT = 5;
+const Scale = {
+  INIT: '100%',
+  STEP: 25,
+  MIN: 25,
+  MAX: 100
+};
 
 const uploadControl = document.querySelector('#upload-file');
 const userForm = document.querySelector('.img-upload__overlay');
@@ -43,7 +50,7 @@ const pristine = new Pristine(imageUploadForm, {
 });
 
 const userCommentElement = imageUploadForm.querySelector('.text__description');
-const validateComment = (comment) => comment.length <= 140;
+const validateComment = (comment) => comment.length <= MESSAGE_MAX_LENGTH;
 
 pristine.addValidator(userCommentElement, validateComment, 'Не более 140 символов');
 
@@ -68,7 +75,7 @@ const validateHashtag = (hashtagString) => {
   const hashtags = hashtagString.split(' ');
   const makeUniq = (arr) => [...new Set(arr)];
   isHashtagCorrect = hashtags.every(isHashtag);
-  isHashtagCorrectCount = hashtags.length <= 5;
+  isHashtagCorrectCount = hashtags.length <= HASHTAG_MAX_COUNT;
   isHashtagUniq = makeUniq(hashtags).length === hashtags.length;
   return isHashtagCorrect && isHashtagCorrectCount && isHashtagUniq;
 };
@@ -97,24 +104,32 @@ const scaleElement = document.querySelector('.scale');
 const scaleSmallerElement = scaleElement.querySelector('.scale__control--smaller');
 const scaleBiggerElement = scaleElement.querySelector('.scale__control--bigger');
 const scaleValueElement = scaleElement.querySelector('.scale__control--value');
+scaleValueElement.value = Scale.INIT;
 
 const scaleCalculate = (step) => {
   let result;
   let scaleValue = Number(scaleValueElement.value.slice(0,-1));
   scaleValue = scaleValue + step;
   scaleValue = Math.round(scaleValue / Math.abs(step)) * Math.abs(step);
-  if (scaleValue < 0) {
-    result = 0;
-  } else if (scaleValue > 100) {
-    result = 100;
+  if (scaleValue < Scale.MIN) {
+    result = Scale.MIN;
+  } else if (scaleValue > Scale.MAX) {
+    result = Scale.MAX;
   } else {
     result = scaleValue;
   }
   scaleValueElement.value = `${result}%`;
 };
+
+const scalePicture = () => {
+  document.querySelector('.img-upload__preview img').style.transform = `scale(${(scaleValueElement.value.slice(0,-1) / 100)})`;
+};
 scaleSmallerElement.addEventListener('click', () => {
-  scaleCalculate(-SCALE_STEP);
+  scaleCalculate(-Scale.STEP);
+  scalePicture();
 });
 scaleBiggerElement.addEventListener('click', () => {
-  scaleCalculate(SCALE_STEP);
+  scaleCalculate(Scale.STEP);
+  scalePicture();
 });
+
