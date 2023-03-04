@@ -1,5 +1,7 @@
 import {isEscapeKey} from './util.js';
 
+const SCALE_STEP = 25;
+
 const uploadControl = document.querySelector('#upload-file');
 const userForm = document.querySelector('.img-upload__overlay');
 const userFormCancel = document.querySelector('#upload-cancel');
@@ -91,3 +93,28 @@ hashtagElement.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeydown);
 });
 
+const scaleElement = document.querySelector('.scale');
+const scaleSmallerElement = scaleElement.querySelector('.scale__control--smaller');
+const scaleBiggerElement = scaleElement.querySelector('.scale__control--bigger');
+const scaleValueElement = scaleElement.querySelector('.scale__control--value');
+
+const scaleCalculate = (step) => {
+  let result;
+  let scaleValue = Number(scaleValueElement.value.slice(0,-1));
+  scaleValue = scaleValue + step;
+  scaleValue = Math.round(scaleValue / Math.abs(step)) * Math.abs(step);
+  if (scaleValue < 0) {
+    result = 0;
+  } else if (scaleValue > 100) {
+    result = 100;
+  } else {
+    result = scaleValue;
+  }
+  scaleValueElement.value = `${result}%`;
+};
+scaleSmallerElement.addEventListener('click', () => {
+  scaleCalculate(-SCALE_STEP);
+});
+scaleBiggerElement.addEventListener('click', () => {
+  scaleCalculate(SCALE_STEP);
+});
