@@ -240,6 +240,7 @@ effectList.addEventListener('click', (evt) => {
       break;
     default:
       hideSlider();
+      effectLevelSliderElement.noUiSlider.set(100);
   }
 });
 
