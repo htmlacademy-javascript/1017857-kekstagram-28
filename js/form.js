@@ -46,7 +46,7 @@ let isHashtagCorrect = true;
 let isHashtagUniq = true;
 
 const isHashtag = (word) => {
-  const regexp = /^#[a-zа-я0-9]{1,19}$/;
+  const regexp = /^#[a-zA-Zа-яА-Яё0-9]{1,19}$/;
   return regexp.test(word);
 };
 const validateHashtag = (hashtagString) => {
