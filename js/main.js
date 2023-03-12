@@ -1,11 +1,18 @@
-import {generatePhotosData} from './mocks/photos-data.js';
 import {renderMiniatures} from './miniatures.js';
-import {openUserForm} from './form.js';
+import {setUploadControlChange} from './user-modal.js';
+import {getData} from './api.js';
+import {showAlert} from './util.js';
+import {setUserForm} from './user-form.js';
 
-const COUNT_OF_PHOTOS = 25;
-const uploadControl = document.querySelector('#upload-file');
+getData()
+  .then((miniaturesData) => {
+    renderMiniatures(miniaturesData);
+  })
+  .catch(
+    (err) => {
+      showAlert(err.message);
+    }
+  );
 
-renderMiniatures(generatePhotosData(COUNT_OF_PHOTOS));
-uploadControl.addEventListener('change', () => {
-  openUserForm();
-});
+setUploadControlChange();
+setUserForm();
