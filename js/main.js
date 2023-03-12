@@ -1,9 +1,8 @@
 import {renderMiniatures} from './miniatures.js';
-import {openUserForm} from './form.js';
+import {setUploadControlChange} from './user-modal.js';
 import {getData} from './api.js';
 import {showAlert} from './util.js';
-
-const uploadControl = document.querySelector('#upload-file');
+import {setUserForm} from './user-form.js';
 
 getData()
   .then((miniaturesData) => {
@@ -15,6 +14,5 @@ getData()
     }
   );
 
-uploadControl.addEventListener('change', () => {
-  openUserForm();
-});
+setUploadControlChange();
+setUserForm();

@@ -20,19 +20,19 @@ const getData = () => fetch(
     throw new Error(ErrorText.GET_DATA);
   });
 
-// const sendData = (body) => fetch(
-//   `${BASE_URL}${Route.SEND_DATA}`,
-//   {
-//     method: 'POST',
-//     body,
-//   })
-//   .then((response) => {
-//     if (!response.ok) {
-//       throw new Error();
-//     }
-//   })
-//   .catch(() => {
-//     throw new Error('Не удалось отправить форму. Попробуйте ещё раз');
-//   });
+const sendData = (body) => fetch(
+  `${BASE_URL}${Route.SEND_DATA}`,
+  {
+    method: 'POST',
+    body,
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error();
+    }
+  })
+  .catch(() => {
+    throw new Error(ErrorText.SEND_DATA);
+  });
 
-export {getData};
+export {getData, sendData};
