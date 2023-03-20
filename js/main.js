@@ -4,13 +4,14 @@ import {getData} from './api.js';
 import {showAlert} from './util.js';
 import {setUserForm} from './user-form.js';
 import {showImageFilters} from './filters.js';
-import {addFilterDefaultButtonHandler, addFilterRandomButtonHandler} from './filters.js';
+import {addFilterDefaultButtonHandler, addFilterRandomButtonHandler, addFilterDiscussedButtonHandler} from './filters.js';
 
 getData()
   .then((miniaturesData) => {
     renderMiniatures(miniaturesData);
     addFilterDefaultButtonHandler(miniaturesData);
     addFilterRandomButtonHandler(miniaturesData);
+    addFilterDiscussedButtonHandler(miniaturesData);
     showImageFilters();
   })
   .catch(

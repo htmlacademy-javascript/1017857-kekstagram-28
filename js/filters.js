@@ -29,6 +29,8 @@ const filterRandomMiniatures = (miniatures, count) => {
   return result;
 };
 
+const filterDiscussedMiniatures = (miniatures) => miniatures.sort((a, b) => a.comments.length > b.comments.length ? -1 : 1);
+
 const filterDefaultButton = document.querySelector('#filter-default');
 const filterRandomButton = document.querySelector('#filter-random');
 const filterDiscussedButton = document.querySelector('#filter-discussed');
@@ -49,5 +51,13 @@ const addFilterRandomButtonHandler = (miniatures) => {
     renderMiniatures(filterRandomMiniatures(miniatures, RANDOM_MINIATURES_COUNT));
   });
 };
+const addFilterDiscussedButtonHandler = (miniatures) => {
+  filterDiscussedButton.addEventListener('click', () => {
+    filterDefaultButton.classList.remove('img-filters__button--active');
+    filterRandomButton.classList.remove('img-filters__button--active');
+    filterDiscussedButton.classList.add('img-filters__button--active');
+    renderMiniatures(filterDiscussedMiniatures(miniatures));
+  });
+};
 
-export {showImageFilters, hideImageFilters,addFilterDefaultButtonHandler, addFilterRandomButtonHandler};
+export {showImageFilters, hideImageFilters,addFilterDefaultButtonHandler, addFilterRandomButtonHandler, addFilterDiscussedButtonHandler};
