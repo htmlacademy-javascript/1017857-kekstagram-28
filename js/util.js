@@ -58,4 +58,18 @@ const createRandomIdFromRangeGenerator = (min, max) => {
   };
 };
 
-export {isEscapeKey, showAlert, createRandomIdFromRangeGenerator};
+/**
+ * Функция устранения дребезга
+ * @param callback - колбэк функция
+ * @param {number} timeoutDelay - задержка в миллисекундах
+ * @return {(function(...[*]): void)|*}
+ */
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export {isEscapeKey, showAlert, createRandomIdFromRangeGenerator, debounce};

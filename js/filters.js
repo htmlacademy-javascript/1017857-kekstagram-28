@@ -1,5 +1,4 @@
 import {createRandomIdFromRangeGenerator} from './util.js';
-import {renderMiniatures} from './miniatures.js';
 
 const RANDOM_MINIATURES_COUNT = 10;
 
@@ -35,29 +34,29 @@ const filterDefaultButton = document.querySelector('#filter-default');
 const filterRandomButton = document.querySelector('#filter-random');
 const filterDiscussedButton = document.querySelector('#filter-discussed');
 
-const addFilterDefaultButtonHandler = (miniatures) => {
+const addFilterDefaultButtonHandler = (miniatures, cb) => {
   filterDefaultButton.addEventListener('click', () => {
     filterDefaultButton.classList.add('img-filters__button--active');
     filterRandomButton.classList.remove('img-filters__button--active');
     filterDiscussedButton.classList.remove('img-filters__button--active');
-    renderMiniatures(miniatures);
+    cb(miniatures);
   });
 };
-const addFilterRandomButtonHandler = (miniatures) => {
+const addFilterRandomButtonHandler = (miniatures, cb) => {
   filterRandomButton.addEventListener('click', () => {
     filterDefaultButton.classList.remove('img-filters__button--active');
     filterRandomButton.classList.add('img-filters__button--active');
     filterDiscussedButton.classList.remove('img-filters__button--active');
-    renderMiniatures(filterRandomMiniatures(miniatures, RANDOM_MINIATURES_COUNT));
+    cb(filterRandomMiniatures(miniatures, RANDOM_MINIATURES_COUNT));
   });
 };
-const addFilterDiscussedButtonHandler = (miniatures) => {
+const addFilterDiscussedButtonHandler = (miniatures, cb) => {
   filterDiscussedButton.addEventListener('click', () => {
     filterDefaultButton.classList.remove('img-filters__button--active');
     filterRandomButton.classList.remove('img-filters__button--active');
     filterDiscussedButton.classList.add('img-filters__button--active');
-    renderMiniatures(filterDiscussedMiniatures(miniatures));
+    cb(filterDiscussedMiniatures(miniatures));
   });
 };
 
-export {showImageFilters, hideImageFilters,addFilterDefaultButtonHandler, addFilterRandomButtonHandler, addFilterDiscussedButtonHandler};
+export {showImageFilters, hideImageFilters, addFilterDefaultButtonHandler, addFilterRandomButtonHandler, addFilterDiscussedButtonHandler};
