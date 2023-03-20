@@ -29,12 +29,25 @@ const filterRandomMiniatures = (miniatures, count) => {
   return result;
 };
 
+const filterDefaultButton = document.querySelector('#filter-default');
 const filterRandomButton = document.querySelector('#filter-random');
+const filterDiscussedButton = document.querySelector('#filter-discussed');
 
+const addFilterDefaultButtonHandler = (miniatures) => {
+  filterDefaultButton.addEventListener('click', () => {
+    filterDefaultButton.classList.add('img-filters__button--active');
+    filterRandomButton.classList.remove('img-filters__button--active');
+    filterDiscussedButton.classList.remove('img-filters__button--active');
+    renderMiniatures(miniatures);
+  });
+};
 const addFilterRandomButtonHandler = (miniatures) => {
   filterRandomButton.addEventListener('click', () => {
+    filterDefaultButton.classList.remove('img-filters__button--active');
+    filterRandomButton.classList.add('img-filters__button--active');
+    filterDiscussedButton.classList.remove('img-filters__button--active');
     renderMiniatures(filterRandomMiniatures(miniatures, RANDOM_MINIATURES_COUNT));
   });
 };
 
-export {showImageFilters, hideImageFilters, addFilterRandomButtonHandler};
+export {showImageFilters, hideImageFilters,addFilterDefaultButtonHandler, addFilterRandomButtonHandler};
