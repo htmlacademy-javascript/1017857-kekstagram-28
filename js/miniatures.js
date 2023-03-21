@@ -4,6 +4,9 @@ const miniatureListElement = document.querySelector('.pictures');
 const miniatureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const miniatureListFragment = document.createDocumentFragment();
 
+/**
+ * Функция удаляет список комментариев под фото
+ */
 const resetMiniatures = () => {
   const miniatures = miniatureListElement.querySelectorAll('.picture');
   miniatures.forEach((miniature) => {

@@ -18,16 +18,27 @@ const hideImageFilters = () => {
   imageFiltersElement.classList.add('img-filters--inactive');
 };
 
+/**
+ * Функция возвращает массив заданного размера случайных миниатюр
+ * @param {array} miniatures - массив данных по миниатюрам
+ * @param {number} count - количество миниатюр, которое надо вернуть
+ * @return {array} случайный массив миниатюр
+ */
 const filterRandomMiniatures = (miniatures, count) => {
   const randomIdFromRangeGenerator = createRandomIdFromRangeGenerator(0, miniatures.length - 1);
-  const result = [];
+  const randomMiniatureDataArray = [];
   for(let i = 0; i < count; i++){
     const id = randomIdFromRangeGenerator();
-    result.push(miniatures[id]);
+    randomMiniatureDataArray.push(miniatures[id]);
   }
-  return result;
+  return randomMiniatureDataArray;
 };
 
+/**
+ * Функция возвращает массив миниатюр в отсортированном порядке по количеству комментариев
+ * @param {array} miniatures - массив данных по миниатюрам
+ * @return {array} отсортированный массив
+ */
 const filterDiscussedMiniatures = (miniatures) => {
   const sortedMiniatures = miniatures.slice();
   sortedMiniatures.sort((a, b) => a.comments.length > b.comments.length ? -1 : 1);
@@ -38,6 +49,11 @@ const filterDefaultButton = document.querySelector('#filter-default');
 const filterRandomButton = document.querySelector('#filter-random');
 const filterDiscussedButton = document.querySelector('#filter-discussed');
 
+/**
+ * Функция добавляет обработчик события по клику на фильтре по умолчанию
+ * @param {array} miniatures - массив данных по миниатюрам
+ * @param {function} cb - колбэк функция
+ */
 const addFilterDefaultButtonHandler = (miniatures, cb) => {
   filterDefaultButton.addEventListener('click', () => {
     filterDefaultButton.classList.add('img-filters__button--active');
@@ -46,6 +62,12 @@ const addFilterDefaultButtonHandler = (miniatures, cb) => {
     cb(miniatures);
   });
 };
+
+/**
+ * Функция добавляет обработчик события по клику на фильтре случайных миниатюр
+ * @param {array} miniatures - массив данных по миниатюрам
+ * @param {function} cb - колбэк функция
+ */
 const addFilterRandomButtonHandler = (miniatures, cb) => {
   filterRandomButton.addEventListener('click', () => {
     filterDefaultButton.classList.remove('img-filters__button--active');
@@ -54,6 +76,12 @@ const addFilterRandomButtonHandler = (miniatures, cb) => {
     cb(filterRandomMiniatures(miniatures, RANDOM_MINIATURES_COUNT));
   });
 };
+
+/**
+ * Функция добавляет обработчик события по клику на фильтре сортировки по комментариям
+ * @param {array} miniatures - массив данных по миниатюрам
+ * @param {function} cb - колбэк функция
+ */
 const addFilterDiscussedButtonHandler = (miniatures, cb) => {
   filterDiscussedButton.addEventListener('click', () => {
     filterDefaultButton.classList.remove('img-filters__button--active');

@@ -1,16 +1,19 @@
-import {setScaleClick} from './scale.js';
-import {setEffectLevelSliderClickUpdate} from './effect.js';
-import {setUserFormSubmit} from './user-form-validation.js';
+import {addScaleClickHandler} from './scale.js';
+import {addEffectLevelSliderClickUpdateHandler} from './effect.js';
+import {addUserFormSubmitHandler} from './user-form-validation.js';
 
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const fileChooser = document.querySelector('#upload-file');
 const userPicture = document.querySelector('.img-upload__preview img');
 
-const setUserForm = () => {
-  setScaleClick(userPicture);
-  setEffectLevelSliderClickUpdate(userPicture);
-  setUserFormSubmit(userPicture);
+/**
+ * Функция добавляет обработчики событий: изменение масштаба, изменение диапазона значений эффекта, отправку пользовательской формы, изменения загружаемого изображения
+ */
+const addUserFormHandler = () => {
+  addScaleClickHandler(userPicture);
+  addEffectLevelSliderClickUpdateHandler(userPicture);
+  addUserFormSubmitHandler(userPicture);
 
   fileChooser.addEventListener('change', () => {
     const file = fileChooser.files[0];
@@ -22,4 +25,4 @@ const setUserForm = () => {
   });
 };
 
-export {setUserForm};
+export {addUserFormHandler};
