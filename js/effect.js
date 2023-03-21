@@ -2,7 +2,6 @@ const effectLevelSliderElement = document.querySelector('.effect-level__slider')
 const effectLevelElement = document.querySelector('.effect-level__value');
 const effectSliderContainer = document.querySelector('.effect-level');
 
-
 const hideSlider = () => {
   effectSliderContainer.classList.add('hidden');
 };
@@ -21,9 +20,9 @@ noUiSlider.create(effectLevelSliderElement, {
   connect: 'lower',
 });
 const getFilter = (userPicture, filterValue) => {
-  const effect = userPicture.classList.value.split('--');
+  const effect = userPicture.classList.value.split('--')[1];
   let filter;
-  switch (effect[1]) {
+  switch (effect) {
     case 'chrome':
       filter = `grayscale(${filterValue})`;
       break;
