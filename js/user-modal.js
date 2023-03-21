@@ -1,5 +1,6 @@
 import {isEscapeKey} from './util.js';
 import {resetScale} from './scale.js';
+import {resetEffect} from './effect.js';
 
 const imageUploadForm = document.querySelector('#upload-select-image');
 const userForm = document.querySelector('.img-upload__overlay');
@@ -26,6 +27,7 @@ const openUserForm = () => {
   document.querySelector('body').classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
   resetScale(userPicture);
+  resetEffect(userPicture);
 };
 
 userFormCancel.addEventListener('click', () => {

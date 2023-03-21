@@ -2,11 +2,16 @@ const effectLevelSliderElement = document.querySelector('.effect-level__slider')
 const effectLevelElement = document.querySelector('.effect-level__value');
 const effectSliderContainer = document.querySelector('.effect-level');
 
-
+/**
+ * Функция скрывает слайдер выбора диапазона значений эффекта
+ */
 const hideSlider = () => {
   effectSliderContainer.classList.add('hidden');
 };
 
+/**
+ * Функция показывает слайдер выбора диапазона значений эффекта
+ */
 const showSlider = () => {
   effectSliderContainer.classList.remove('hidden');
 };
@@ -20,10 +25,16 @@ noUiSlider.create(effectLevelSliderElement, {
   step: 1,
   connect: 'lower',
 });
+
+/**
+ * Функция для получения названия эффекта
+ * @param {Node} userPicture - пользовательское изображение. HTML элемент.
+ * @param {string} filterValue - название эффекта
+ */
 const getFilter = (userPicture, filterValue) => {
-  const effect = userPicture.classList.value.split('--');
+  const effect = userPicture.classList.value.split('--')[1];
   let filter;
-  switch (effect[1]) {
+  switch (effect) {
     case 'chrome':
       filter = `grayscale(${filterValue})`;
       break;
@@ -47,6 +58,10 @@ const getFilter = (userPicture, filterValue) => {
 
 const effectList = document.querySelector('.effects__list');
 
+/**
+ * Функция сброса эффекта в исходное состояние - нейтральный фильтр со значением 100
+ * @param {Node} userPicture - Пользовательское изображение к которому применяется эффект
+ */
 const resetEffect = (userPicture) => {
   userPicture.classList.remove(userPicture.classList.item(0));
   userPicture.classList.add('effects__preview--none');
@@ -54,7 +69,11 @@ const resetEffect = (userPicture) => {
   effectLevelSliderElement.noUiSlider.set(100);
 };
 
-const setEffectLevelSliderClickUpdate = (userPicture) => {
+/**
+ * Функция добавляет обработчики события на обновление значения эффекта и выбора эффекта
+ * @param {Node} userPicture - Пользовательское изображение к которому применяется эффект
+ */
+const addEffectLevelSliderClickUpdateHandler = (userPicture) => {
   effectLevelSliderElement.noUiSlider.on('update', () => {
     effectLevelElement.value = effectLevelSliderElement.noUiSlider.get();
     getFilter(userPicture, effectLevelElement.value);
@@ -125,4 +144,4 @@ const setEffectLevelSliderClickUpdate = (userPicture) => {
   });
 };
 
-export {setEffectLevelSliderClickUpdate, resetEffect};
+export {addEffectLevelSliderClickUpdateHandler, resetEffect};

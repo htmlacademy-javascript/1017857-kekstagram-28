@@ -6,11 +6,18 @@ const commentsLoader = social.querySelector('.comments-loader');
 let commentList = [];
 let countComments = SHOW_COMMENT_COUNT;
 
-
+/**
+ * Функция очистки списка комментариев
+ */
 const clearComments = () => {
   commentListElement.innerHTML = '';
 };
 
+/**
+ * Функция добавления комментария в список
+ * @param {object} commentData - данные по комментарию
+ * @return {Node} - комментарий в виде HTML элемента
+ */
 const appendCommentItem = (commentData) => {
   const commentItemElement = commentItemTemplate.cloneNode(true);
   commentItemElement.querySelector('.social__picture').setAttribute('src', commentData.avatar);
@@ -19,12 +26,20 @@ const appendCommentItem = (commentData) => {
   return commentItemElement;
 };
 
+/**
+ * Функция создает список комментариев
+ * @param {array} commentsData - массив из комментариев к фотографии
+ */
 const createCommentList = (commentsData) => {
   commentsData.forEach((item) => {
     commentList.push(appendCommentItem(item));
   });
 };
 
+/**
+ * Функция отображает количество показанных комментариев
+ * @param {number} count - количество комментариев к фотографии
+ */
 const showCommentCount = (count) => {
   const reg = /^[0-9]{1,3}/;
   let currentCommentCount = social.querySelector('.social__comment-count').innerHTML;
@@ -32,7 +47,11 @@ const showCommentCount = (count) => {
   social.querySelector('.social__comment-count').innerHTML = currentCommentCount;
 };
 
-
+/**
+ * Функция отображает список комментариев и скрывает кнопку 'загрузить еще', если показаны все комментарии
+ * @param {object} commentsData - данные по комментарию
+ * @param {number} count - общее количество комментариев
+ */
 const renderCommentList = (commentsData, count) => {
   clearComments();
   commentsData.forEach((item, index) => {
@@ -46,8 +65,11 @@ const renderCommentList = (commentsData, count) => {
   if (count >= commentsData.length) {
     commentsLoader.classList.add('hidden');
   }
-  // eslint-disable-next-line no-unused-expressions
-  count < commentsData.length ? showCommentCount(count) : showCommentCount(commentsData.length);
+  if (count < commentsData.length) {
+    showCommentCount(count);
+  } else {
+    showCommentCount(commentsData.length);
+  }
 };
 
 /**
@@ -64,6 +86,9 @@ const modifyCommentList = (commentsData) => {
   renderCommentList(commentList, countComments);
 };
 
+/**
+ * Обработчик события 'click' по кнопке 'загрузить еще'
+ */
 commentsLoader.addEventListener('click', () =>{
   countComments += SHOW_COMMENT_COUNT;
   renderCommentList(commentList, countComments);

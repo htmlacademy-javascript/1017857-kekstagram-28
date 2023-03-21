@@ -122,7 +122,7 @@ const resetDefault = (userPicture) => {
   clearMessageHashtag();
 };
 
-const setUserFormSubmit = (userPicture) => {
+const addUserFormSubmitHandler = (userPicture) => {
   imageUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
@@ -139,4 +139,4 @@ const setUserFormSubmit = (userPicture) => {
   });
 };
 
-export {setUserFormSubmit};
+export {addUserFormSubmitHandler};

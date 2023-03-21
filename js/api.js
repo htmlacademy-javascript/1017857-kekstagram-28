@@ -8,6 +8,10 @@ const ErrorText = {
   SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
 };
 
+/**
+ * Функция получения данных с сервера
+ * @return {Promise<any>}
+ */
 const getData = () => fetch(
   `${BASE_URL}${Route.GET_DATA}`)
   .then((response) => {
@@ -20,6 +24,12 @@ const getData = () => fetch(
     throw new Error(ErrorText.GET_DATA);
   });
 
+
+/**
+ * Функция отправки данных на сервер
+ * @param body - данные из пользовательской формы
+ * @return {Promise<Response>}
+ */
 const sendData = (body) => fetch(
   `${BASE_URL}${Route.SEND_DATA}`,
   {
