@@ -28,7 +28,11 @@ const filterRandomMiniatures = (miniatures, count) => {
   return result;
 };
 
-const filterDiscussedMiniatures = (miniatures) => miniatures.sort((a, b) => a.comments.length > b.comments.length ? -1 : 1);
+const filterDiscussedMiniatures = (miniatures) => {
+  const sortedMiniatures = miniatures.slice();
+  sortedMiniatures.sort((a, b) => a.comments.length > b.comments.length ? -1 : 1);
+  return sortedMiniatures;
+};
 
 const filterDefaultButton = document.querySelector('#filter-default');
 const filterRandomButton = document.querySelector('#filter-random');
