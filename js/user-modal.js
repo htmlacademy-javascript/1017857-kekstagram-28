@@ -7,7 +7,6 @@ const userForm = document.querySelector('.img-upload__overlay');
 const userFormCancel = document.querySelector('#upload-cancel');
 const hashtagElement = imageUploadForm.querySelector('.text__hashtags');
 const userCommentElement = imageUploadForm.querySelector('.text__description');
-const uploadControl = document.querySelector('#upload-file');
 const userPicture = document.querySelector('.img-upload__preview img');
 
 /**
@@ -57,10 +56,4 @@ function onDocumentKeydown(evt) {
   }
 }
 
-const setUploadControlChange = () => {
-  uploadControl.addEventListener('change', () => {
-    openUserForm();
-  });
-};
-
-export {setUploadControlChange};
+export {openUserForm, closeUserForm};
