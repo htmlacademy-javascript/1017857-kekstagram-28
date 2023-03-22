@@ -12,13 +12,6 @@ const showImageFilters = () => {
 };
 
 /**
- * Функция скрывает секцию с фильтрами миниатюр
- */
-const hideImageFilters = () => {
-  imageFiltersElement.classList.add('img-filters--inactive');
-};
-
-/**
  * Функция возвращает массив заданного размера случайных миниатюр
  * @param {array} miniatures - массив данных по миниатюрам
  * @param {number} count - количество миниатюр, которое надо вернуть
@@ -91,4 +84,4 @@ const addFilterDiscussedButtonHandler = (miniatures, cb) => {
   });
 };
 
-export {showImageFilters, hideImageFilters, addFilterDefaultButtonHandler, addFilterRandomButtonHandler, addFilterDiscussedButtonHandler};
+export {showImageFilters, addFilterDefaultButtonHandler, addFilterRandomButtonHandler, addFilterDiscussedButtonHandler};

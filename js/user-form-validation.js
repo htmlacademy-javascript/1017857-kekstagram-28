@@ -1,6 +1,6 @@
 import {sendData} from './api.js';
-import {resetEffect} from './effect.js';
-import {resetScale} from './scale.js';
+import {closeUserForm, onDocumentKeydown} from './user-modal.js';
+import {isEscapeKey} from './util.js';
 
 const ErrorMessages = {
   LONG_MESSAGE: 'Не более 140 символов.',
@@ -13,16 +13,16 @@ const Message = {
   errorText:ErrorMessages.LONG_MESSAGE,
   NAX_LENGTH: 140
 };
-const Hashtag = {
-  Count: {
+const hashtag = {
+  count: {
     errorText: '',
     isCorrect: true
   },
-  Correct: {
+  correct: {
     errorText: '',
     isCorrect: true
   },
-  Uniq: {
+  uniq: {
     errorText: '',
     isCorrect: true
   },
@@ -30,7 +30,7 @@ const Hashtag = {
 };
 
 const SubmitButtonText = {
-  IDLE: 'Опубликовать',
+  PUBLISH: 'Опубликовать',
   SENDING: 'Сохраняю...'
 };
 
@@ -54,89 +54,128 @@ const isHashtag = (word) => {
   return regexp.test(word);
 };
 
-const getHashtags = () => hashtagElement.value.split(/\s+/).filter((elem) => elem);
+const getHashtags = () => hashtagElement.value.toLowerCase().split(/\s+/).filter((elem) => elem);
+
 const validateCorrectHashtag = () => {
-  Hashtag.Correct.isCorrect = getHashtags().every(isHashtag);
-  Hashtag.Correct.errorText = !Hashtag.Correct.isCorrect ? ErrorMessages.WRONG_HASHTAG : '';
-  return Hashtag.Correct.isCorrect;
+  hashtag.correct.isCorrect = getHashtags().every(isHashtag);
+  hashtag.correct.errorText = !hashtag.correct.isCorrect ? ErrorMessages.WRONG_HASHTAG : '';
+  return hashtag.correct.isCorrect;
 };
 const validateCorrectCountHashtag = () => {
-  Hashtag.Count.isCorrect = getHashtags().length <= Hashtag.MAX_COUNT;
-  Hashtag.Count.errorText = !Hashtag.Count.isCorrect ? ErrorMessages.LOT_OF_HASHTAGS : '';
-  return Hashtag.Count.isCorrect;
+  hashtag.count.isCorrect = getHashtags().length <= hashtag.MAX_COUNT;
+  hashtag.count.errorText = !hashtag.count.isCorrect ? ErrorMessages.LOT_OF_HASHTAGS : '';
+  return hashtag.count.isCorrect;
 };
 const validateUniqHashtag = () => {
   const makeUniq = (arr) => [...new Set(arr)];
-  Hashtag.Uniq.isCorrect = makeUniq(getHashtags()).length === getHashtags().length;
-  Hashtag.Uniq.errorText = !Hashtag.Uniq.isCorrect ? ErrorMessages.DUPLICATE_HASHTAG : '';
-  return Hashtag.Uniq.isCorrect;
+  hashtag.uniq.isCorrect = makeUniq(getHashtags()).length === getHashtags().length;
+  hashtag.uniq.errorText = !hashtag.uniq.isCorrect ? ErrorMessages.DUPLICATE_HASHTAG : '';
+  return hashtag.uniq.isCorrect;
 };
 
 const validateHashtagInput = () => validateCorrectHashtag() && validateCorrectCountHashtag() && validateUniqHashtag();
 
-const getErrorMessage = () => `${Hashtag.Count.errorText} ${Hashtag.Correct.errorText} ${Hashtag.Uniq.errorText}`;
+const getErrorMessage = () => `${hashtag.count.errorText} ${hashtag.correct.errorText} ${hashtag.uniq.errorText}`;
 
 pristine.addValidator(hashtagElement, validateHashtagInput, getErrorMessage);
 
 const submitButton = document.querySelector('.img-upload__submit');
+
+/**
+ * Функция блокирует кнопку отправки формы
+ */
 const blockSubmitButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = SubmitButtonText.SENDING;
 };
+
+/**
+ * Функция разблокирует кнопку отправки формы
+ */
 const unblockSubmitButton = () => {
   submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
-
-const clearMessageHashtag = () => {
-  hashtagElement.value = '';
-  userCommentElement.value = '';
+  submitButton.textContent = SubmitButtonText.PUBLISH;
 };
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const successFragment = document.createDocumentFragment();
 const bodyElement = document.querySelector('body');
-const uploadSuccess = () => {
+
+/**
+ * Функция показывает сообщение об успешной отправке данных
+ */
+const openUploadSuccess = () => {
   const successElement = successTemplate.cloneNode(true);
-  successElement.querySelector('.success__button').addEventListener('click', () => {
-    successElement.remove();
-  });
+  document.addEventListener('keydown', onDocumentWithUploadSuccessKeydown);
+  document.addEventListener('click', onDocumentWithUploadSuccessKeydown);
   successFragment.append(successElement);
   bodyElement.append(successFragment);
 };
 
+const closeUploadSuccess = () => {
+  document.querySelector('.success').remove();
+  document.removeEventListener('keydown', onDocumentWithUploadSuccessKeydown);
+  document.removeEventListener('click', onDocumentWithUploadSuccessKeydown);
+};
+
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 const errorFragment = document.createDocumentFragment();
-const uploaderror = () => {
+
+/**
+ * Функция показывает сообщение об ошибке при неудачной отправке данных
+ */
+const openUploadError = () => {
   const errorElement = errorTemplate.cloneNode(true);
-  errorElement.querySelector('.error__button').addEventListener('click', () => {
-    errorElement.remove();
-  });
+  document.addEventListener('keydown', onDocumentWithUploadErrorKeydown);
+  document.addEventListener('click', onDocumentWithUploadErrorKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
   errorFragment.append(errorElement);
   bodyElement.append(errorFragment);
 };
 
-const resetDefault = (userPicture) => {
-  resetEffect(userPicture);
-  resetScale(userPicture);
-  clearMessageHashtag();
+const closeUploadError = () => {
+  document.querySelector('.error').remove();
+  document.removeEventListener('keydown', onDocumentWithUploadErrorKeydown);
+  document.removeEventListener('click', onDocumentWithUploadErrorKeydown);
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
-const addUserFormSubmitHandler = (userPicture) => {
+/**
+ * Функция добавляет обработчик события на отправку формы
+ */
+const addUserFormSubmitHandler = () => {
   imageUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
       sendData(new FormData(evt.target))
-        .then(uploadSuccess)
+        .then(openUploadSuccess)
         .then(() => {
-          resetDefault(userPicture);
+          imageUploadForm.reset();
+          closeUserForm();
         })
-        .catch(uploaderror)
+        .catch(openUploadError)
         .finally(unblockSubmitButton);
     }
   });
 };
+
+/**
+ * Обработчик события на закрытие изображения по кнопке Enter
+ * @param {Object} evt - Объект события
+ */
+function onDocumentWithUploadSuccessKeydown(evt) {
+  if (isEscapeKey(evt) || evt.target.className === 'success' || evt.target.className === 'success__button') {
+    evt.preventDefault();
+    closeUploadSuccess();
+  }
+}
+function onDocumentWithUploadErrorKeydown(evt) {
+  if (isEscapeKey(evt) || evt.target.className === 'error' || evt.target.className === 'error__button') {
+    evt.preventDefault();
+    closeUploadError();
+  }
+}
 
 export {addUserFormSubmitHandler};

@@ -1,5 +1,4 @@
 import {renderMiniatures} from './miniatures.js';
-import {setUploadControlChange} from './user-modal.js';
 import {getData} from './api.js';
 import {showAlert, debounce} from './util.js';
 import {addUserFormHandler} from './user-form.js';
@@ -20,5 +19,4 @@ getData()
     }
   );
 
-setUploadControlChange();
 addUserFormHandler();
