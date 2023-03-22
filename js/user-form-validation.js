@@ -1,5 +1,6 @@
 import {sendData} from './api.js';
-import {closeUserForm} from './user-modal.js';
+import {closeUserForm, onDocumentKeydown} from './user-modal.js';
+import {isEscapeKey} from './util.js';
 
 const ErrorMessages = {
   LONG_MESSAGE: 'Не более 140 символов.',
@@ -54,6 +55,7 @@ const isHashtag = (word) => {
 };
 
 const getHashtags = () => hashtagElement.value.toLowerCase().split(/\s+/).filter((elem) => elem);
+
 const validateCorrectHashtag = () => {
   hashtag.correct.isCorrect = getHashtags().every(isHashtag);
   hashtag.correct.errorText = !hashtag.correct.isCorrect ? ErrorMessages.WRONG_HASHTAG : '';
@@ -102,13 +104,18 @@ const bodyElement = document.querySelector('body');
 /**
  * Функция показывает сообщение об успешной отправке данных
  */
-const uploadSuccess = () => {
+const openUploadSuccess = () => {
   const successElement = successTemplate.cloneNode(true);
-  successElement.querySelector('.success__button').addEventListener('click', () => {
-    successElement.remove();
-  });
+  document.addEventListener('keydown', onDocumentWithUploadSuccessKeydown);
+  document.addEventListener('click', onDocumentWithUploadSuccessKeydown);
   successFragment.append(successElement);
   bodyElement.append(successFragment);
+};
+
+const closeUploadSuccess = () => {
+  document.querySelector('.success').remove();
+  document.removeEventListener('keydown', onDocumentWithUploadSuccessKeydown);
+  document.removeEventListener('click', onDocumentWithUploadSuccessKeydown);
 };
 
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -117,15 +124,25 @@ const errorFragment = document.createDocumentFragment();
 /**
  * Функция показывает сообщение об ошибке при неудачной отправке данных
  */
-const uploadError = () => {
+const openUploadError = () => {
   const errorElement = errorTemplate.cloneNode(true);
-  errorElement.querySelector('.error__button').addEventListener('click', () => {
-    errorElement.remove();
-  });
+  document.addEventListener('keydown', onDocumentWithUploadErrorKeydown);
+  document.addEventListener('click', onDocumentWithUploadErrorKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
   errorFragment.append(errorElement);
   bodyElement.append(errorFragment);
 };
 
+const closeUploadError = () => {
+  document.querySelector('.error').remove();
+  document.removeEventListener('keydown', onDocumentWithUploadErrorKeydown);
+  document.removeEventListener('click', onDocumentWithUploadErrorKeydown);
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+/**
+ * Функция добавляет обработчик события на отправку формы
+ */
 const addUserFormSubmitHandler = () => {
   imageUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -133,15 +150,32 @@ const addUserFormSubmitHandler = () => {
     if (isValid) {
       blockSubmitButton();
       sendData(new FormData(evt.target))
-        .then(uploadSuccess)
+        .then(openUploadSuccess)
         .then(() => {
           imageUploadForm.reset();
           closeUserForm();
         })
-        .catch(uploadError)
+        .catch(openUploadError)
         .finally(unblockSubmitButton);
     }
   });
 };
+
+/**
+ * Обработчик события на закрытие изображения по кнопке Enter
+ * @param {Object} evt - Объект события
+ */
+function onDocumentWithUploadSuccessKeydown(evt) {
+  if (isEscapeKey(evt) || evt.target.className === 'success' || evt.target.className === 'success__button') {
+    evt.preventDefault();
+    closeUploadSuccess();
+  }
+}
+function onDocumentWithUploadErrorKeydown(evt) {
+  if (isEscapeKey(evt) || evt.target.className === 'error' || evt.target.className === 'error__button') {
+    evt.preventDefault();
+    closeUploadError();
+  }
+}
 
 export {addUserFormSubmitHandler};

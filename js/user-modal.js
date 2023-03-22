@@ -56,4 +56,4 @@ function onDocumentKeydown(evt) {
   }
 }
 
-export {openUserForm, closeUserForm};
+export {openUserForm, closeUserForm, onDocumentKeydown};
