@@ -1,6 +1,16 @@
 const ALERT_SHOW_TIME = 5000;
+
+/**
+ * Проверка на нажатие кнопки Esc
+ * @param {object} evt - объект события
+ * @return {boolean} true, если нажата кнопка Esc
+ */
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+/**
+ * Функция показывает сообщение при неудачной попытки получения данных с сервера
+ * @param {string} message - сообщение об ошибке
+ */
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';

@@ -9,10 +9,11 @@ const ErrorMessages = {
   DUPLICATE_HASHTAG: 'Хештеги повторяются.'
 };
 
-const Message = {
-  errorText:ErrorMessages.LONG_MESSAGE,
+const message = {
+  errorText: ErrorMessages.LONG_MESSAGE,
   NAX_LENGTH: 140
 };
+
 const hashtag = {
   count: {
     errorText: '',
@@ -42,39 +43,75 @@ const pristine = new Pristine(imageUploadForm, {
   errorTextTag: 'div',
 });
 
-const validateComment = (comment) => comment.length <= Message.NAX_LENGTH;
+/**
+ * Функция проверяет комментарий на максимальное количество символов
+ * @param {string} comment - комментарий
+ * @return {boolean} true, если комментарий меньше максимально допустимого значения
+ */
+const isValidComment = (comment) => comment.length <= message.NAX_LENGTH;
 
 const userCommentElement = imageUploadForm.querySelector('.text__description');
-pristine.addValidator(userCommentElement, validateComment, `${Message.errorText}`);
+pristine.addValidator(userCommentElement, isValidComment, `${message.errorText}`);
 
 const hashtagElement = imageUploadForm.querySelector('.text__hashtags');
 
+/**
+ * Функция проверяет являться ли слово хештегом
+ * @param {string} word - проверяемое слов
+ * @return {boolean} true, если слова является хештегом
+ */
 const isHashtag = (word) => {
   const regexp = /^#[a-zA-Zа-яА-Яё0-9]{1,19}$/;
   return regexp.test(word);
 };
 
+/**
+ * Функция создает массив хештегов из введенных пользователем данных
+ * @return {array} возвращает массив хештегов
+ */
 const getHashtags = () => hashtagElement.value.toLowerCase().split(/\s+/).filter((elem) => elem);
 
-const validateCorrectHashtag = () => {
+/**
+ * Функция проверяет на допустимые символы хештега
+ * @return {boolean} true, если хештеги корректны
+ */
+const isCorrectHashtag = () => {
   hashtag.correct.isCorrect = getHashtags().every(isHashtag);
   hashtag.correct.errorText = !hashtag.correct.isCorrect ? ErrorMessages.WRONG_HASHTAG : '';
   return hashtag.correct.isCorrect;
 };
-const validateCorrectCountHashtag = () => {
+
+/**
+ * Функция проверяет на предельно допустимое количество хештегов
+ * @return {boolean} true, если количество хештегов не превышает предельно допустимого значения
+ */
+const isCorrectCountHashtag = () => {
   hashtag.count.isCorrect = getHashtags().length <= hashtag.MAX_COUNT;
   hashtag.count.errorText = !hashtag.count.isCorrect ? ErrorMessages.LOT_OF_HASHTAGS : '';
   return hashtag.count.isCorrect;
 };
-const validateUniqHashtag = () => {
+
+/**
+ * Функция проверяет хештеги на уникальность
+ * @return {boolean} true, если хештеги не повторяются
+ */
+const isUniqHashtag = () => {
   const makeUniq = (arr) => [...new Set(arr)];
   hashtag.uniq.isCorrect = makeUniq(getHashtags()).length === getHashtags().length;
   hashtag.uniq.errorText = !hashtag.uniq.isCorrect ? ErrorMessages.DUPLICATE_HASHTAG : '';
   return hashtag.uniq.isCorrect;
 };
 
-const validateHashtagInput = () => validateCorrectHashtag() && validateCorrectCountHashtag() && validateUniqHashtag();
+/**
+ * Функция проверяет на правильность ввода хештегов
+ * @return {boolean} true, если хештеги введены верно
+ */
+const validateHashtagInput = () => isCorrectHashtag() && isCorrectCountHashtag() && isUniqHashtag();
 
+/**
+ * Функция формирует сообщение об ошибке при неверном вводе хештега
+ * @return {string} возвращает сообщение об ошибке
+ */
 const getErrorMessage = () => `${hashtag.count.errorText} ${hashtag.correct.errorText} ${hashtag.uniq.errorText}`;
 
 pristine.addValidator(hashtagElement, validateHashtagInput, getErrorMessage);
@@ -106,16 +143,19 @@ const bodyElement = document.querySelector('body');
  */
 const openUploadSuccess = () => {
   const successElement = successTemplate.cloneNode(true);
-  document.addEventListener('keydown', onDocumentWithUploadSuccessKeydown);
-  document.addEventListener('click', onDocumentWithUploadSuccessKeydown);
+  document.addEventListener('keydown', onDocumentWithUploadSuccessClickAndKeydown);
+  document.addEventListener('click', onDocumentWithUploadSuccessClickAndKeydown);
   successFragment.append(successElement);
   bodyElement.append(successFragment);
 };
 
+/**
+ * Функция удаляет сообщение об успешной отправке данных
+ */
 const closeUploadSuccess = () => {
   document.querySelector('.success').remove();
-  document.removeEventListener('keydown', onDocumentWithUploadSuccessKeydown);
-  document.removeEventListener('click', onDocumentWithUploadSuccessKeydown);
+  document.removeEventListener('keydown', onDocumentWithUploadSuccessClickAndKeydown);
+  document.removeEventListener('click', onDocumentWithUploadSuccessClickAndKeydown);
 };
 
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -126,17 +166,20 @@ const errorFragment = document.createDocumentFragment();
  */
 const openUploadError = () => {
   const errorElement = errorTemplate.cloneNode(true);
-  document.addEventListener('keydown', onDocumentWithUploadErrorKeydown);
-  document.addEventListener('click', onDocumentWithUploadErrorKeydown);
+  document.addEventListener('keydown', onDocumentWithUploadErrorClickAndKeydown);
+  document.addEventListener('click', onDocumentWithUploadErrorClickAndKeydown);
   document.removeEventListener('keydown', onDocumentKeydown);
   errorFragment.append(errorElement);
   bodyElement.append(errorFragment);
 };
 
+/**
+ * Функция удаляет сообщение об ошибке при неудачной отправке данных
+ */
 const closeUploadError = () => {
   document.querySelector('.error').remove();
-  document.removeEventListener('keydown', onDocumentWithUploadErrorKeydown);
-  document.removeEventListener('click', onDocumentWithUploadErrorKeydown);
+  document.removeEventListener('keydown', onDocumentWithUploadErrorClickAndKeydown);
+  document.removeEventListener('click', onDocumentWithUploadErrorClickAndKeydown);
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
@@ -162,16 +205,21 @@ const addUserFormSubmitHandler = () => {
 };
 
 /**
- * Обработчик события на закрытие изображения по кнопке Enter
+ * Обработчик события на закрытие сообщения об успешной отправке данных по кнопке Enter и клику
  * @param {Object} evt - Объект события
  */
-function onDocumentWithUploadSuccessKeydown(evt) {
+function onDocumentWithUploadSuccessClickAndKeydown(evt) {
   if (isEscapeKey(evt) || evt.target.className === 'success' || evt.target.className === 'success__button') {
     evt.preventDefault();
     closeUploadSuccess();
   }
 }
-function onDocumentWithUploadErrorKeydown(evt) {
+
+/**
+ * Обработчик события на закрытие сообщения при неудачной попытке отправки данных по кнопке Enter и клику
+ * @param {Object} evt - Объект события
+ */
+function onDocumentWithUploadErrorClickAndKeydown(evt) {
   if (isEscapeKey(evt) || evt.target.className === 'error' || evt.target.className === 'error__button') {
     evt.preventDefault();
     closeUploadError();
