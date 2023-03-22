@@ -29,26 +29,45 @@ const openUserForm = () => {
   resetEffect(userPicture);
 };
 
+/**
+ * Обработчик события на закрытие формы загрузки изображения по клику
+ */
 userFormCancel.addEventListener('click', () => {
   closeUserForm();
 });
 
+/**
+ * Удаление обработчика события на закрытие формы загрузки изображения по кнопке Esc, при фокусе на поле ввода хештегов
+ */
 hashtagElement.addEventListener('focus', () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 });
 
+/**
+ * Добавление обработчика события на закрытие формы загрузки изображения по кнопке Esc, при потере фокуса на поле ввода хештегов
+ */
 hashtagElement.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeydown);
 });
 
+/**
+ * Удаление обработчика события на закрытие формы загрузки изображения по кнопке Esc, при фокусе на поле ввода сообщения
+ */
 userCommentElement.addEventListener('focus', () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 });
 
+/**
+ * Добавление обработчика события на закрытие формы загрузки изображения по кнопке Esc, при потере фокуса на поле ввода сообщения
+ */
 userCommentElement.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeydown);
 });
 
+/**
+ * Обработчик события на закрытие формы загрузки изображения по кнопке Esc
+ * @param {object} evt - объект события
+ */
 function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
