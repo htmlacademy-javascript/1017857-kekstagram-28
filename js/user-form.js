@@ -1,7 +1,7 @@
 import {addScaleClickHandler} from './scale.js';
 import {addEffectLevelSliderClickUpdateHandler} from './effect.js';
 import {addUserFormSubmitHandler} from './user-form-validation.js';
-import {openUserForm} from './user-modal.js';
+import {openUserForm, addEventListenersToForm} from './user-modal.js';
 
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
@@ -15,6 +15,7 @@ const addUserFormHandler = () => {
   addScaleClickHandler(userPicture);
   addEffectLevelSliderClickUpdateHandler(userPicture);
   addUserFormSubmitHandler();
+  addEventListenersToForm();
 
   fileChooser.addEventListener('change', () => {
     openUserForm();

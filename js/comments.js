@@ -65,11 +65,8 @@ const renderCommentList = (commentsData, count) => {
   if (count >= commentsData.length) {
     commentsLoader.classList.add('hidden');
   }
-  if (count < commentsData.length) {
-    showCommentCount(count);
-  } else {
-    showCommentCount(commentsData.length);
-  }
+  const commentsCount = count < commentsData.length ? count : commentsData.length;
+  showCommentCount(commentsCount);
 };
 
 /**

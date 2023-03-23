@@ -1,3 +1,5 @@
+const VALUE_SLIDER_INIT = 100;
+
 const effectLevelSliderElement = document.querySelector('.effect-level__slider');
 const effectLevelElement = document.querySelector('.effect-level__value');
 const effectSliderContainer = document.querySelector('.effect-level');
@@ -63,10 +65,10 @@ const effectList = document.querySelector('.effects__list');
  * @param {Node} userPicture - Пользовательское изображение к которому применяется эффект
  */
 const resetEffect = (userPicture) => {
-  userPicture.classList.remove(userPicture.classList.item(0));
+  userPicture.className = '';
   userPicture.classList.add('effects__preview--none');
   hideSlider();
-  effectLevelSliderElement.noUiSlider.set(100);
+  effectLevelSliderElement.noUiSlider.set(VALUE_SLIDER_INIT);
 };
 
 /**
@@ -80,7 +82,7 @@ const addEffectLevelSliderClickUpdateHandler = (userPicture) => {
   });
 
   effectList.addEventListener('click', (evt) => {
-    userPicture.classList.remove(userPicture.classList.item(0));
+    userPicture.className = '';
     userPicture.classList.add(`effects__preview--${evt.target.value}`);
     switch (evt.target.value) {
       case 'chrome':

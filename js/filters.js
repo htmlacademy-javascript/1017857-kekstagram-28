@@ -20,7 +20,7 @@ const showImageFilters = () => {
 const filterRandomMiniatures = (miniatures, count) => {
   const randomIdFromRangeGenerator = createRandomIdFromRangeGenerator(0, miniatures.length - 1);
   const randomMiniatureDataArray = [];
-  for(let i = 0; i < count; i++){
+  for (let i = 0; i < count; i++){
     const id = randomIdFromRangeGenerator();
     randomMiniatureDataArray.push(miniatures[id]);
   }

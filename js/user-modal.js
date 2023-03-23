@@ -30,39 +30,25 @@ const openUserForm = () => {
 };
 
 /**
- * Обработчик события на закрытие формы загрузки изображения по клику
+ * Функция добавляет обработчики события на форму загрузки изображения
  */
-userFormCancel.addEventListener('click', () => {
-  closeUserForm();
-});
-
-/**
- * Удаление обработчика события на закрытие формы загрузки изображения по кнопке Esc, при фокусе на поле ввода хештегов
- */
-hashtagElement.addEventListener('focus', () => {
-  document.removeEventListener('keydown', onDocumentKeydown);
-});
-
-/**
- * Добавление обработчика события на закрытие формы загрузки изображения по кнопке Esc, при потере фокуса на поле ввода хештегов
- */
-hashtagElement.addEventListener('blur', () => {
-  document.addEventListener('keydown', onDocumentKeydown);
-});
-
-/**
- * Удаление обработчика события на закрытие формы загрузки изображения по кнопке Esc, при фокусе на поле ввода сообщения
- */
-userCommentElement.addEventListener('focus', () => {
-  document.removeEventListener('keydown', onDocumentKeydown);
-});
-
-/**
- * Добавление обработчика события на закрытие формы загрузки изображения по кнопке Esc, при потере фокуса на поле ввода сообщения
- */
-userCommentElement.addEventListener('blur', () => {
-  document.addEventListener('keydown', onDocumentKeydown);
-});
+const addEventListenersToForm = () => {
+  userFormCancel.addEventListener('click', () => {
+    closeUserForm();
+  });
+  hashtagElement.addEventListener('focus', () => {
+    document.removeEventListener('keydown', onDocumentKeydown);
+  });
+  hashtagElement.addEventListener('blur', () => {
+    document.addEventListener('keydown', onDocumentKeydown);
+  });
+  userCommentElement.addEventListener('focus', () => {
+    document.removeEventListener('keydown', onDocumentKeydown);
+  });
+  userCommentElement.addEventListener('blur', () => {
+    document.addEventListener('keydown', onDocumentKeydown);
+  });
+};
 
 /**
  * Обработчик события на закрытие формы загрузки изображения по кнопке Esc
@@ -75,4 +61,4 @@ function onDocumentKeydown(evt) {
   }
 }
 
-export {openUserForm, closeUserForm, onDocumentKeydown};
+export {openUserForm, closeUserForm, onDocumentKeydown, addEventListenersToForm};
