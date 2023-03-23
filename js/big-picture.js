@@ -43,6 +43,8 @@ closeBigPictureElement.addEventListener('click', () => {
   closeBigPicture();
 });
 
+
+// Функция объявлена в виде Function Declaration т.к. нужен механизм hoisting
 /**
  * Обработчик события на закрытие изображения по кнопке ESC
  * @param {Object} evt - Объект события

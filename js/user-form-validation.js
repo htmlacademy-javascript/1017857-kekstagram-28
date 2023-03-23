@@ -204,6 +204,7 @@ const addUserFormSubmitHandler = () => {
   });
 };
 
+// Функция объявлена в виде Function Declaration т.к. нужен механизм hoisting
 /**
  * Обработчик события на закрытие сообщения об успешной отправке данных по кнопке Enter и клику
  * @param {Object} evt - Объект события
@@ -215,6 +216,7 @@ function onDocumentWithUploadSuccessClickAndKeydown(evt) {
   }
 }
 
+// Функция объявлена в виде Function Declaration т.к. нужен механизм hoisting
 /**
  * Обработчик события на закрытие сообщения при неудачной попытке отправки данных по кнопке Enter и клику
  * @param {Object} evt - Объект события
