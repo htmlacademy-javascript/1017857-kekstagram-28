@@ -17,7 +17,7 @@ const modifyBigPicture = (photoData) => {
 };
 
 /**
- * Функция открывает большое изображение и добавляет обработчик на закрытие окна по нажатию на кнопку Enter
+ * Функция открывает большое изображение и добавляет обработчик на закрытие окна по нажатию на кнопку ESC
  * @param {Object} photoData - данные изображения
  */
 const openBigPicture = (photoData) => {
@@ -28,7 +28,7 @@ const openBigPicture = (photoData) => {
 };
 
 /**
- * Функция закрывает большое изображение и удаляет обработчик на закрытие окна по нажатию на кнопку Enter
+ * Функция закрывает большое изображение и удаляет обработчик на закрытие окна по нажатию на кнопку ESC
  */
 const closeBigPicture = () => {
   bigPictureElement.classList.add('hidden');
@@ -44,7 +44,7 @@ closeBigPictureElement.addEventListener('click', () => {
 });
 
 /**
- * Обработчик события на закрытие изображения по кнопке Enter
+ * Обработчик события на закрытие изображения по кнопке ESC
  * @param {Object} evt - Объект события
  */
 function onDocumentKeydown(evt) {
