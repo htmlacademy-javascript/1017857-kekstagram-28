@@ -50,6 +50,7 @@ const addEventListenersToForm = () => {
   });
 };
 
+// Функция объявлена в виде Function Declaration т.к. нужен механизм hoisting
 /**
  * Обработчик события на закрытие формы загрузки изображения по кнопке Esc
  * @param {object} evt - объект события
