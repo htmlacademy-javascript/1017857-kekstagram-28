@@ -140,8 +140,11 @@ const addEffectLevelSliderClickUpdateHandler = (userPicture) => {
           step: 0.1
         });
         break;
-      default:
+      case 'none':
         resetEffect(userPicture);
+        break;
+      default:
+        break;
     }
   });
 };
