@@ -3,7 +3,7 @@ const social = document.querySelector('.social');
 const commentListElement = social.querySelector('.social__comments');
 const commentItemTemplate = commentListElement.querySelector('.social__comment');
 const commentsLoader = social.querySelector('.comments-loader');
-let commentList = [];
+let commentsList = [];
 let countComments = SHOW_COMMENT_COUNT;
 
 /**
@@ -32,7 +32,7 @@ const appendCommentItem = (commentData) => {
  */
 const createCommentList = (commentsData) => {
   commentsData.forEach((item) => {
-    commentList.push(appendCommentItem(item));
+    commentsList.push(appendCommentItem(item));
   });
 };
 
@@ -74,13 +74,13 @@ const renderCommentList = (commentsData, count) => {
  * @param {Array} commentsData - Список комментариев к фотографии
  */
 const modifyCommentList = (commentsData) => {
-  commentList = [];
+  commentsList = [];
   countComments = SHOW_COMMENT_COUNT;
   clearComments();
   social.querySelector('.comments-count').textContent = commentsData.length;
   commentsLoader.classList.remove('hidden');
   createCommentList(commentsData);
-  renderCommentList(commentList, countComments);
+  renderCommentList(commentsList, countComments);
 };
 
 /**
@@ -88,7 +88,7 @@ const modifyCommentList = (commentsData) => {
  */
 commentsLoader.addEventListener('click', () =>{
   countComments += SHOW_COMMENT_COUNT;
-  renderCommentList(commentList, countComments);
+  renderCommentList(commentsList, countComments);
 });
 
 export {modifyCommentList};

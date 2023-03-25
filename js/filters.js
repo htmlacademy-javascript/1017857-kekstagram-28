@@ -19,12 +19,12 @@ const showImageFilters = () => {
  */
 const filterRandomMiniatures = (miniatures, count) => {
   const randomIdFromRangeGenerator = createRandomIdFromRangeGenerator(0, miniatures.length - 1);
-  const randomMiniatureDataArray = [];
+  const randomMiniaturesData = [];
   for (let i = 0; i < count; i++){
     const id = randomIdFromRangeGenerator();
-    randomMiniatureDataArray.push(miniatures[id]);
+    randomMiniaturesData.push(miniatures[id]);
   }
-  return randomMiniatureDataArray;
+  return randomMiniaturesData;
 };
 
 /**
@@ -38,50 +38,41 @@ const filterDiscussedMiniatures = (miniatures) => {
   return sortedMiniatures;
 };
 
+const filtersFormElement = document.querySelector('.img-filters__form');
 const filterDefaultButton = document.querySelector('#filter-default');
 const filterRandomButton = document.querySelector('#filter-random');
 const filterDiscussedButton = document.querySelector('#filter-discussed');
 
 /**
- * Функция добавляет обработчик события по клику на фильтре по умолчанию
+ * Функция добавляет обработчик события по клику на фильтрах
  * @param {array} miniatures - массив данных по миниатюрам
  * @param {function} cb - колбэк функция
  */
-const addFilterDefaultButtonHandler = (miniatures, cb) => {
-  filterDefaultButton.addEventListener('click', () => {
-    filterDefaultButton.classList.add('img-filters__button--active');
-    filterRandomButton.classList.remove('img-filters__button--active');
-    filterDiscussedButton.classList.remove('img-filters__button--active');
-    cb(miniatures);
+const addFilterButtonHandler = (miniatures, cb) => {
+  filtersFormElement.addEventListener('click', (evt) => {
+    switch (evt.target.id) {
+      case ('filter-default'):
+        filterDefaultButton.classList.add('img-filters__button--active');
+        filterRandomButton.classList.remove('img-filters__button--active');
+        filterDiscussedButton.classList.remove('img-filters__button--active');
+        cb(miniatures);
+        break;
+      case ('filter-random'):
+        filterDefaultButton.classList.remove('img-filters__button--active');
+        filterRandomButton.classList.add('img-filters__button--active');
+        filterDiscussedButton.classList.remove('img-filters__button--active');
+        cb(filterRandomMiniatures(miniatures, RANDOM_MINIATURES_COUNT));
+        break;
+      case ('filter-discussed'):
+        filterDefaultButton.classList.remove('img-filters__button--active');
+        filterRandomButton.classList.remove('img-filters__button--active');
+        filterDiscussedButton.classList.add('img-filters__button--active');
+        cb(filterDiscussedMiniatures(miniatures));
+        break;
+      default:
+        break;
+    }
   });
 };
 
-/**
- * Функция добавляет обработчик события по клику на фильтре случайных миниатюр
- * @param {array} miniatures - массив данных по миниатюрам
- * @param {function} cb - колбэк функция
- */
-const addFilterRandomButtonHandler = (miniatures, cb) => {
-  filterRandomButton.addEventListener('click', () => {
-    filterDefaultButton.classList.remove('img-filters__button--active');
-    filterRandomButton.classList.add('img-filters__button--active');
-    filterDiscussedButton.classList.remove('img-filters__button--active');
-    cb(filterRandomMiniatures(miniatures, RANDOM_MINIATURES_COUNT));
-  });
-};
-
-/**
- * Функция добавляет обработчик события по клику на фильтре сортировки по комментариям
- * @param {array} miniatures - массив данных по миниатюрам
- * @param {function} cb - колбэк функция
- */
-const addFilterDiscussedButtonHandler = (miniatures, cb) => {
-  filterDiscussedButton.addEventListener('click', () => {
-    filterDefaultButton.classList.remove('img-filters__button--active');
-    filterRandomButton.classList.remove('img-filters__button--active');
-    filterDiscussedButton.classList.add('img-filters__button--active');
-    cb(filterDiscussedMiniatures(miniatures));
-  });
-};
-
-export {showImageFilters, addFilterDefaultButtonHandler, addFilterRandomButtonHandler, addFilterDiscussedButtonHandler};
+export {showImageFilters, addFilterButtonHandler};
