@@ -4,7 +4,6 @@ const commentListElement = social.querySelector('.social__comments');
 const commentItemTemplate = commentListElement.querySelector('.social__comment');
 const commentsLoader = social.querySelector('.comments-loader');
 let commentsList = [];
-let countComments = SHOW_COMMENT_COUNT;
 
 /**
  * Функция очистки списка комментариев
@@ -38,35 +37,29 @@ const createCommentList = (commentsData) => {
 
 /**
  * Функция отображает количество показанных комментариев
- * @param {number} count - количество комментариев к фотографии
  */
-const showCommentCount = (count) => {
+const showCommentCount = () => {
   const reg = /^[0-9]{1,3}/;
   let currentCommentCount = social.querySelector('.social__comment-count').innerHTML;
-  currentCommentCount = currentCommentCount.replace(reg, count);
+  currentCommentCount = currentCommentCount.replace(reg, commentListElement.childElementCount);
   social.querySelector('.social__comment-count').innerHTML = currentCommentCount;
 };
 
 /**
- * Функция отображает список комментариев и скрывает кнопку 'загрузить еще', если показаны все комментарии
- * @param {object} commentsData - данные по комментарию
- * @param {number} count - общее количество комментариев
+ * Функция возвращает фрагмент с заданным количеством комментариев
+ * @param {array} commentElementList - массив комментариев
+ * @param {number} commentsCount - количество комментариев
+ * @return {Node} фрагмент с комментариями
  */
-const renderCommentList = (commentsData, count) => {
-  clearComments();
-  commentsData.forEach((item, index) => {
-    if (index >= count) {
-      item.classList.add('hidden');
-    } else {
-      item.classList.remove('hidden');
+const getNextComments = (commentElementList, commentsCount) => {
+  const nextCommentsFragment = document.createDocumentFragment();
+  for (let i = 0; i < commentsCount; i++) {
+    if (commentElementList.length === 0) {
+      break;
     }
-    commentListElement.append(item);
-  });
-  if (count >= commentsData.length) {
-    commentsLoader.classList.add('hidden');
+    nextCommentsFragment.append(commentElementList.shift());
   }
-  const commentsCount = count < commentsData.length ? count : commentsData.length;
-  showCommentCount(commentsCount);
+  return nextCommentsFragment;
 };
 
 /**
@@ -75,20 +68,23 @@ const renderCommentList = (commentsData, count) => {
  */
 const modifyCommentList = (commentsData) => {
   commentsList = [];
-  countComments = SHOW_COMMENT_COUNT;
   clearComments();
   social.querySelector('.comments-count').textContent = commentsData.length;
   commentsLoader.classList.remove('hidden');
   createCommentList(commentsData);
-  renderCommentList(commentsList, countComments);
+  commentListElement.append(getNextComments(commentsList, SHOW_COMMENT_COUNT));
+  showCommentCount();
 };
 
 /**
  * Обработчик события 'click' по кнопке 'загрузить еще'
  */
-commentsLoader.addEventListener('click', () =>{
-  countComments += SHOW_COMMENT_COUNT;
-  renderCommentList(commentsList, countComments);
+commentsLoader.addEventListener('click', () => {
+  commentListElement.append(getNextComments(commentsList, SHOW_COMMENT_COUNT));
+  showCommentCount();
+  if (commentsList.length === 0) {
+    commentsLoader.classList.add('hidden');
+  }
 });
 
 export {modifyCommentList};
