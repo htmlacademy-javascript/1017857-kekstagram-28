@@ -29,7 +29,6 @@ const showAlert = (message) => {
 };
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
-const successFragment = document.createDocumentFragment();
 const bodyElement = document.querySelector('body');
 
 /**
@@ -39,8 +38,7 @@ const openUploadSuccess = () => {
   const successElement = successTemplate.cloneNode(true);
   document.addEventListener('keydown', onDocumentWithUploadSuccessClickAndKeydown);
   document.addEventListener('click', onDocumentWithUploadSuccessClickAndKeydown);
-  successFragment.append(successElement);
-  bodyElement.append(successFragment);
+  bodyElement.append(successElement);
 };
 
 /**
@@ -53,7 +51,6 @@ const closeUploadSuccess = () => {
 };
 
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
-const errorFragment = document.createDocumentFragment();
 
 /**
  * Функция показывает сообщение об ошибке при неудачной отправке данных
@@ -63,8 +60,7 @@ const openUploadError = () => {
   document.addEventListener('keydown', onDocumentWithUploadErrorClickAndKeydown);
   document.addEventListener('click', onDocumentWithUploadErrorClickAndKeydown);
   document.removeEventListener('keydown', onDocumentKeydown);
-  errorFragment.append(errorElement);
-  bodyElement.append(errorFragment);
+  bodyElement.append(errorElement);
 };
 
 /**

@@ -8,10 +8,10 @@ const ErrorMessages = {
 const message = {
   errorText: '',
   isCorrect: true,
-  MAX_LENGTH: 140
+  maxLength: 140
 };
 
-const hashtag = {
+const hashtagParam = {
   count: {
     errorText: '',
     isCorrect: true
@@ -24,25 +24,25 @@ const hashtag = {
     errorText: '',
     isCorrect: true
   },
-  MAX_COUNT: 5
+  maxCount: 5
 };
 
-const imageUploadForm = document.querySelector('#upload-select-image');
+const imageUploadFormElement = document.querySelector('#upload-select-image');
 
-const pristine = new Pristine(imageUploadForm, {
+const pristine = new Pristine(imageUploadFormElement, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextTag: 'div',
 });
 
-const userCommentElement = imageUploadForm.querySelector('.text__description');
+const userCommentElement = imageUploadFormElement.querySelector('.text__description');
 
 /**
  * Функция формирует сообщение об ошибке в зависимости от длины
  * @param {string} comment - комментарий
  */
 const setCommentMessage = (comment) => {
-  if (comment.length >= message.MAX_LENGTH) {
+  if (comment.length >= message.maxLength) {
     message.errorText = ErrorMessages.LONG_MESSAGE;
     message.isCorrect = false;
   } else {
@@ -68,7 +68,7 @@ const getCommentErrorText = () => message.errorText;
 
 pristine.addValidator(userCommentElement, isValidCommentMessage, getCommentErrorText);
 
-const hashtagElement = imageUploadForm.querySelector('.text__hashtags');
+const hashtagElement = imageUploadFormElement.querySelector('.text__hashtags');
 
 /**
  * Функция проверяет являться ли слово хештегом
@@ -84,16 +84,16 @@ const isHashtag = (word) => {
  * Функция создает массив хештегов из введенных пользователем данных
  * @return {array} возвращает массив хештегов
  */
-const getHashtags = () => hashtagElement.value.toLowerCase().split(/\s+/).filter((elem) => elem);
+const getHashtags = () => hashtagElement.value.toLowerCase().split(/\s+/).filter((hashtag) => hashtag);
 
 /**
  * Функция проверяет на допустимые символы хештега
  * @return {boolean} true, если хештеги корректны
  */
 const isCorrectHashtag = () => {
-  hashtag.correct.isCorrect = getHashtags().every(isHashtag);
-  hashtag.correct.errorText = !hashtag.correct.isCorrect ? ErrorMessages.WRONG_HASHTAG : '';
-  return hashtag.correct.isCorrect;
+  hashtagParam.correct.isCorrect = getHashtags().every(isHashtag);
+  hashtagParam.correct.errorText = !hashtagParam.correct.isCorrect ? ErrorMessages.WRONG_HASHTAG : '';
+  return hashtagParam.correct.isCorrect;
 };
 
 /**
@@ -101,9 +101,9 @@ const isCorrectHashtag = () => {
  * @return {boolean} true, если количество хештегов не превышает предельно допустимого значения
  */
 const isCorrectCountHashtag = () => {
-  hashtag.count.isCorrect = getHashtags().length <= hashtag.MAX_COUNT;
-  hashtag.count.errorText = !hashtag.count.isCorrect ? ErrorMessages.LOT_OF_HASHTAGS : '';
-  return hashtag.count.isCorrect;
+  hashtagParam.count.isCorrect = getHashtags().length <= hashtagParam.maxCount;
+  hashtagParam.count.errorText = !hashtagParam.count.isCorrect ? ErrorMessages.LOT_OF_HASHTAGS : '';
+  return hashtagParam.count.isCorrect;
 };
 
 /**
@@ -112,9 +112,9 @@ const isCorrectCountHashtag = () => {
  */
 const isUniqHashtag = () => {
   const makeUniq = (arr) => [...new Set(arr)];
-  hashtag.uniq.isCorrect = makeUniq(getHashtags()).length === getHashtags().length;
-  hashtag.uniq.errorText = !hashtag.uniq.isCorrect ? ErrorMessages.DUPLICATE_HASHTAG : '';
-  return hashtag.uniq.isCorrect;
+  hashtagParam.uniq.isCorrect = makeUniq(getHashtags()).length === getHashtags().length;
+  hashtagParam.uniq.errorText = !hashtagParam.uniq.isCorrect ? ErrorMessages.DUPLICATE_HASHTAG : '';
+  return hashtagParam.uniq.isCorrect;
 };
 
 /**
@@ -127,11 +127,10 @@ const validateHashtagInput = () => isCorrectHashtag() && isCorrectCountHashtag()
  * Функция формирует сообщение об ошибке при неверном вводе хештега
  * @return {string} возвращает сообщение об ошибке
  */
-const getErrorMessage = () => `${hashtag.count.errorText} ${hashtag.correct.errorText} ${hashtag.uniq.errorText}`;
+const getErrorMessage = () => `${hashtagParam.count.errorText} ${hashtagParam.correct.errorText} ${hashtagParam.uniq.errorText}`;
 pristine.addValidator(hashtagElement, validateHashtagInput, getErrorMessage);
 
 const isValidComment = () => pristine.validate();
-
 
 /**
  * Функция очищает поля ввода хештегов и сообщения
@@ -140,6 +139,5 @@ const resetMessageAndHashtagText = () => {
   hashtagElement.value = '';
   userCommentElement.value = '';
 };
-
 
 export {resetMessageAndHashtagText, isValidComment};
